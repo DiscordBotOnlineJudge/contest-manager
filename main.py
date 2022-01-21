@@ -173,7 +173,14 @@ async def on_ready():
     await sendLiveScoreboards()
     print(f'{client.user} has connected to Discord!')
 
-    await listen_scoreboard() # Run until program is stopped
+    loop = asyncio.get_event_loop()
+    try:
+        asyncio.ensure_future(listen_scoreboard())
+        loop.run_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        loop.close()
 
 @client.event
 async def on_message(message):
