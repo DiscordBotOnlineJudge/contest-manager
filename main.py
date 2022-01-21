@@ -5,6 +5,8 @@ import discord
 from functools import cmp_to_key
 import asyncio
 
+client = discord.Client()
+
 cluster = MongoClient("mongodb+srv://onlineuser:$" + os.getenv("PASSWORD") + "@discord-bot-online-judg.7gm4i.mongodb.net/database?retryWrites=true&w=majority")
 db = cluster['database']
 settings = db['settings']
