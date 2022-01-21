@@ -157,7 +157,6 @@ async def listen_scoreboard():
         current_contest = settings.find_one({"type":"livecontests"})['arr']
         for x in range(len(current_contest)):
             content = getScoreboard(current_contest[x])
-            print(scb)
             if content != prev_scb[x]:
                 await scb[x].edit(content = content)
                 prev_scb[x] = content
