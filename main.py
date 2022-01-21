@@ -160,13 +160,11 @@ async def listen_scoreboard():
             if content != prev_scb[x]:
                 await scb[x].edit(content = content)
                 prev_scb[x] = content
+                print("Edited content in " + current_contest[x])
         await asyncio.sleep(3)
-        print("...")
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="-help"))
-
     global running
     running = True
 
