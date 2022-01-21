@@ -151,9 +151,9 @@ async def sendLiveScoreboards():
         prev_scb[x] = content
 
 async def listen_scoreboard():
+    global scb
+    global prev_scb
     while True:
-        global scb
-        global prev_scb
         current_contest = settings.find_one({"type":"livecontests"})['arr']
         for x in range(len(current_contest)):
             content = getScoreboard(current_contest[x])
