@@ -7,6 +7,7 @@ import asyncio
 
 client = discord.Client()
 pswd = os.getenv("PASSWORD")
+print(pswd)
 cluster = MongoClient(pswd)
 
 db = cluster['database']
