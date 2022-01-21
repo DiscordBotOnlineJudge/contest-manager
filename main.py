@@ -185,4 +185,15 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    if str(message.content).startswith("-set"):
+        arr = str(message.content).split()
+        
+        if settings.find_one({"type":"access", "mode":"admin", "name":str(message.author)}) is None:
+            await message.channel.send("Sorry, you do not have sufficient permissions to use this command.")
+            return
+
+        settings.update_one({"type":"livecontests"}, {"$set":{"arr":arr[1:]}})
+        await sendLiveScoreboards()
+        await message.channel.send("Live scoreboard contests set to `" + str(arr[1:]) + "`")
+
 client.run(os.getenv("TOKEN"))
