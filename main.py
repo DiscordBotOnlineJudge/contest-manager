@@ -160,7 +160,7 @@ async def listen_scoreboard():
             if content != prev_scb[x]:
                 await scb[x].edit(content = content)
                 prev_scb[x] = content
-        asyncio.sleep(3)
+        await asyncio.sleep(3)
         print("...")
 
 @client.event
