@@ -19,6 +19,15 @@ def cmp(a, b):
 def getLen(contest):
     return settings.find_one({"type":"contest", "name":contest})['len']
 
+def amt(len):
+    h = len // 3600
+    len %= 3600
+    m = len // 60
+    len %= 60
+    s = len
+
+    return "{hh} hours, {mm} minutes, and {ss} seconds".format(hh = h, mm = m, ss = s)
+
 def getStatus():
     msg = ""
     for x in settings.find({"type":"judge"}):
@@ -27,6 +36,16 @@ def getStatus():
             msg += "(" + x['runtimes'] + ")"
         msg += "\n"
     return msg
+
+def decode(cde):
+    if cde == 0:
+        return "Available"
+    elif cde == 1:
+        return "Submission in Progress"
+    elif cde == 2:
+        return "Offline"
+    else:
+        return ""
     
 def getScoreboard(contest):
     ct = settings.find_one({"type":"contest", "name":contest})
