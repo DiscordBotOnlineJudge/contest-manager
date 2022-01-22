@@ -19,6 +19,15 @@ def cmp(a, b):
 def getLen(contest):
     return settings.find_one({"type":"contest", "name":contest})['len']
 
+def getStatus():
+    msg = ""
+    for x in settings.find({"type":"judge"}):
+        msg += "Judge #" + str(x['num']) + ": " + decode(x['status']).ljust(23)
+        if x['status'] != 2:
+            msg += "(" + x['runtimes'] + ")"
+        msg += "\n"
+    return msg
+    
 def getScoreboard(contest):
     ct = settings.find_one({"type":"contest", "name":contest})
     if ct is None:
@@ -153,6 +162,9 @@ async def sendLiveScoreboards():
 async def listen_scoreboard():
     global scb
     global prev_scb
+    global status
+    global prev_status
+
     while True:
         current_contest = settings.find_one({"type":"livecontests"})['arr']
         try:
@@ -162,6 +174,11 @@ async def listen_scoreboard():
                     await scb[x].edit(content = content)
                     prev_scb[x] = content
                     print("Edited content in " + current_contest[x])
+
+            msg = getStatus()
+            if msg != prev_status:
+                await status.edit(content = ("**Current live judge server statuses:**\n```" + msg + "\n```"))
+                print("Edited live status message")
         except Exception as e:
             print("Exception occurred:", e)
         await asyncio.sleep(3)
@@ -172,6 +189,14 @@ async def on_ready():
     running = True
 
     await sendLiveScoreboards()
+
+    global status
+    global prev_status
+    stat = client.get_channel(851468547414294568)
+    await stat.purge(limit = 100)
+    prev_status = getStatus()
+    status = await stat.send("**Current live judge server statuses:**\n```" + prev_status + "\n```")
+
     print(f'{client.user} has connected to Discord!')
 
     loop = asyncio.get_event_loop()
