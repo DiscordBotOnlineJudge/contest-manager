@@ -155,12 +155,15 @@ async def listen_scoreboard():
     global prev_scb
     while True:
         current_contest = settings.find_one({"type":"livecontests"})['arr']
-        for x in range(len(current_contest)):
-            content = getScoreboard(current_contest[x])
-            if content != prev_scb[x]:
-                await scb[x].edit(content = content)
-                prev_scb[x] = content
-                print("Edited content in " + current_contest[x])
+        try:
+            for x in range(len(current_contest)):
+                content = getScoreboard(current_contest[x])
+                if content != prev_scb[x] and not scb[x] is None:
+                    await scb[x].edit(content = content)
+                    prev_scb[x] = content
+                    print("Edited content in " + current_contest[x])
+        except Exception as e:
+            print("Exception occurred:", e)
         await asyncio.sleep(3)
 
 @client.event
