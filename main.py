@@ -197,6 +197,7 @@ async def listen_scoreboard():
             msg = getStatus()
             if msg != prev_status:
                 await status.edit(content = ("**Current live judge server statuses:**\n```" + msg + "\n```"))
+                prev_status = msg
                 print("Edited live status message")
         except Exception as e:
             print("Exception occurred:", e)
@@ -223,8 +224,6 @@ async def on_ready():
         asyncio.ensure_future(listen_scoreboard())
         loop.run_forever()
     except KeyboardInterrupt:
-        pass
-    finally:
         loop.close()
 
 @client.event
